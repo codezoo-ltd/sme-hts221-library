@@ -8,33 +8,36 @@
    digital serial interfaces.
    The sensing element consists of a polymer dielectric planar capacitor structure capable of
    detecting relative humidity variations.
-*/
+ */
 #include <Wire.h>
 #include <HTS221.h>
 #include <Arduino.h>
+
+#define SerialUSB Serial
+#define NB_IOT_LED  4
 
 double humidity;
 unsigned int pollingInterval = 1000; // in milliseconds
 
 // The setup function runs once when you press reset or power the board
 void setup() {
-  pinMode(PIN_LED_13, OUTPUT);
-  
-  Wire.begin();
-  if (!smeHumidity.begin()) { // Led On if there is an error initializing the sensor
-        digitalWrite(PIN_LED_13, HIGH);
-  }
-  else {
-    digitalWrite(PIN_LED_13, LOW);
-  }
-  SerialUSB.begin(115200);
+	pinMode(NB_IOT_LED, OUTPUT);
+
+	Wire.begin();
+	if (!smeHumidity.begin()) { // Led On if there is an error initializing the sensor
+		digitalWrite(NB_IOT_LED, HIGH);
+	}
+	else {
+		digitalWrite(NB_IOT_LED, LOW);
+	}
+	SerialUSB.begin(9600);
 }
 
 // The loop function runs over and over again forever
 void loop() {
-  // The value is returned as a percentage of humidity (0 = dry desert, 100 = rain forest)
-  humidity = smeHumidity.readHumidity();
-  SerialUSB.println(humidity);
-  delay(pollingInterval);
+	// The value is returned as a percentage of humidity (0 = dry desert, 100 = rain forest)
+	humidity = smeHumidity.readHumidity();
+	SerialUSB.println(humidity);
+	delay(pollingInterval);
 }
 
